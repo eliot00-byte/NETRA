@@ -20,7 +20,8 @@ import atexit
 
 #NETRA - Network Recon and Wireless Toolkit
 #TRETRA --version 0.9.5
-#coder: nexucy19/akbas70
+#coder: /eliot00
+#old name: nexucy19/akbas70
 
 def print_logo():
     logo = """
@@ -55,7 +56,7 @@ def print_logo():
     print(C.R + logo + C.END) 
     log(f"NETRA - Wireless Device Fingerprint Scanner", C.B)
     log(f"Version: 0.9.5 | Author: {GITHUB_URL}", C.C)
-    log(f"CODER: nexucy19/akbas70", C.C )
+    log(f"CODER: eliot00" C.C )
     print("-" * 40)
 
 
