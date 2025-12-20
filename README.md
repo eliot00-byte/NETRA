@@ -29,7 +29,9 @@ This multi-tool efficiently consolidates the core functionalities of several net
 
 ```bash
 # Clone the NETRA repository
-git clone [https://github.com/akbas70/NETRA.git](https://github.com/akbas70/NETRA.git)
+old:git clone [https://github.com/akbas70/NETRA.git](https://github.com/akbas70/NETRA.git)
+new:git clone [https://github.com/akbas70/NETRA.git](https://github.com/eliot00-byte/NETRA.git)
+new:
 cd NETRA
 
 # Install required libraries, including Scapy
