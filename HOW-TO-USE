@@ -1,36 +1,83 @@
-### 📝 How to Use NETRA
+How to Use NETRA
+NETRA is a command-line interface (CLI) tool. All commands follow the structure: python3 netra.py <command> <options>. Most wireless functions require Root privileges (sudo).
 
-NETRA is a command-line interface (CLI) tool. All commands follow the structure: `python3 netra.py <command> <options>`. Remember that most wireless functions require **Root privileges (sudo)**.
+1. SCAN Mode: Network Reconnaissance
+Use the scan command for multi-threaded port scanning, banner grabbing, and device fingerprinting.
 
----
-
-#### 1. SCAN Mode: Network Reconnaissance
-
-Use the `scan` command for multi-threaded port scanning, banner grabbing, and device fingerprinting.
-
-| Command Syntax | Purpose | Example |
-| :--- | :--- | :--- |
-| `python3 netra.py scan -t <IP>` | Basic scan of default ports. | `python3 netra.py scan -t 192.168.1.1` |
-| `sudo python3 netra.py scan -t <IP> -i <IFACE>` | Full scan with MAC/Vendor discovery (Recommended). | `sudo python3 netra.py scan -t 10.0.0.5 -i eth0` |
-| `python3 netra.py scan -t <IP> --ports <LIST>` | Scan a custom range/list of ports. | `python3 netra.py scan -t 10.1.1.20 --ports 21,80,443,1000-2000` |
-
----
-
-#### 2. WIRELESS Mode: Attack & Utilities (Requires SUDO)
-
+Command Syntax	Purpose	Example
+python3 netra.py scan -t <IP>	Basic scan of default ports.	python3 netra.py scan -t 192.168.1.1
+sudo python3 netra.py scan -t <IP> -i <IFACE>	Full scan with MAC/Vendor discovery (Recommended).	sudo python3 netra.py scan -t 10.0.0.5 -i eth0
+python3 netra.py scan -t <IP> --ports <LIST>	Scan a custom range/list of ports.	python3 netra.py scan -t 10.1.1.20 --ports 21,80,443,1000-2000
+2. WIRELESS Mode: Attack & Utilities (Requires SUDO)
 These commands interact directly with your Wi-Fi interface and require Monitor Mode for advanced functions.
 
-| Command Syntax | Purpose | Notes |
-| :--- | :--- | :--- |
-| `sudo python3 netra.py wireless netscan -i <IFACE>` | Performs an ARP scan of the local network. | |
-| `sudo python3 netra.py wireless deauth -i <MON_IF> -t <CLIENT_MAC> -g <AP_MAC>` | Sends Deauth packets to disconnect a client. | Use `-t FF:FF:FF:FF:FF:FF` for broadcast. |
-| `sudo python3 netra.py wireless fake-ap -i <MON_IF> --ssid <NAME> -ch <CH>` | Creates a Rogue AP (Requires `airbase-ng`). **Interface auto-cleanup on exit.** | Press `Ctrl+C` to stop the AP. |
+Command Syntax	Purpose	Notes
+sudo python3 netra.py wireless netscan -i <IFACE>	Performs an ARP scan of the local network.	
+sudo python3 netra.py wireless deauth -i <MON_IF> -t <CLIENT_MAC> -g <AP_MAC>	Sends Deauth packets to disconnect a client.	Use -t FF:FF:FF:FF:FF:FF for broadcast.
+sudo python3 netra.py wireless fake-ap -i <MON_IF> --ssid <NAME> -ch <CH>	Creates a Rogue AP (Requires airbase-ng). Interface auto-cleanup on exit.	Press Ctrl+C to stop the AP.
+3. ATTACK Mode: Advanced Wi-Fi Attacks (v1.0)
+New in v1.0, this mode provides enhanced attack capabilities with evasion techniques.
 
----
+Command Syntax	Purpose	Example
+sudo python3 netra.py attack deauth -i <MON_IF> -t <CLIENT_MAC> -g <AP_MAC>	Send deauth packets with evasion.	sudo python3 netra.py attack deauth -i wlan0mon -t 00:11:22:33:44:55 -g 66:77:88:99:AA:BB --evasion randomize
+sudo python3 netra.py attack fakeap -i <MON_IF> --ssid <NAME> -ch <CH>	Create fake AP with customization.	sudo python3 netra.py attack fakeap -i wlan0mon --ssid "Free WiFi" --hidden --auth wpa2
+4. SESSION Mode: Attack Sessions (v1.0)
+Manage attack sessions for long-running operations.
 
-#### 3. UTILS Mode: System Utilities
+Command Syntax	Purpose	Example
+python3 netra.py session new --name <NAME> --config <FILE>	Create new attack session.	python3 netra.py session new --name "Test Session" --config config.json
+python3 netra.py session save	Save current session to disk.	
+python3 netra.py session load <FILE>	Load session from file.	python3 netra.py session load session_abc123.json
+5. UTILS Mode: System Utilities
+Command Syntax	Purpose	Example
+sudo python3 netra.py utils mac-change -i <IFACE>	Changes interface MAC to a random address.	sudo python3 netra.py utils mac-change -i wlan0
+python3 netra.py utils links	Displays helpful external resources and links.	
+Installation Requirements
+bash
+Download
+Copy code
+# Install dependencies
+pip3 install scapy
+apt-get install -y aircrack-ng iwconfig ifconfig
+Running NETRA
+bash
+Download
+Copy code
+# Basic usage
+python3 netra.py scan -t 192.168.1.1
 
-| Command Syntax | Purpose | Example |
-| :--- | :--- | :--- |
-| `sudo python3 netra.py utils mac-change -i <IFACE>` | Changes interface MAC to a random address. | `sudo python3 netra.py utils mac-change -i wlan0` |
-| `python3 netra.py utils links` | Displays helpful external resources and links. | |
+# With root privileges
+sudo python3 netra.py wireless netscan -i wlan0mon
+Advanced Usage Examples
+1. Advanced Deauth Attack with Evasion
+bash
+Download
+Copy code
+sudo python3 netra.py attack deauth -i wlan0mon -t FF:FF:FF:FF:FF:FF -g 00:11:22:33:44:55 --evasion randomize rate_limit
+2. Create Hidden Fake AP with WPA2 Protection
+bash
+Download
+Copy code
+sudo python3 netra.py attack fakeap -i wlan0mon --ssid "Corporate WiFi" --hidden --auth wpa2 --password "Secure123!"
+3. Long-running Session Management
+bash
+Download
+Copy code
+# Start session
+python3 netra.py session new --name "Weekend Test" --config config.json
+
+# Run multiple attacks
+sudo python3 netra.py attack deauth -i wlan0mon -t 00:11:22:33:44:55 -g 66:77:88:99:AA:BB
+sudo python3 netra.py attack fakeap -i wlan0mon --ssid "Public WiFi" --auth open
+
+# Save session
+python3 netra.py session save
+Security Considerations
+All wireless attacks require Monitor Mode (sudo python3 netra.py utils mode -i wlan0 -m Monitor)
+Session data is automatically saved for later analysis
+Interface states are automatically restored after attacks
+Logs provide detailed attack information for post-analysis
+Development Status
+This toolkit is in active development and may receive updates. For feature requests or bug reports, please open an issue on GitHub.
+
+Copy message
